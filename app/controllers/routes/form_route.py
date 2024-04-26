@@ -23,8 +23,6 @@ def submit():
     email_pass = os.getenv("SMTP_PASSWORD")
     email_reciever = os.getenv("EMAIL_RECIEVER")
 
-    submit = 'Resposta do formulario'
-
     body = """
     <!DOCTYPE html>
     <html lang="pt-br">
@@ -72,8 +70,9 @@ def submit():
     </html>
 
     """
-    
     em = MIMEMultipart('alternatives')
+
+    em['Subject'] = f'Formulário de Agrado por {name}'
 
     html_part = MIMEText(body, 'html')
 
