@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, url_for
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from flask import Flask, jsonify
@@ -23,7 +23,7 @@ def submit():
     email_pass = os.getenv("SMTP_PASSWORD")
     email_reciever = os.getenv("EMAIL_RECIEVER")
 
-    body = """
+    body = f"""
     <!DOCTYPE html>
     <html lang="pt-br">
     <head>
@@ -31,45 +31,17 @@ def submit():
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Email</title>
     </head>
-    <style>
-        * {
-            box-sizing: border-box;
-            padding: 0;
-            margin: 0;
-        }
-        section {
-            font-family: Lucida Sans;
-            display: flex;
-            flex-wrap: wrap;
-            flex-direction: column;
-            box-shadow: -1px 1px 5px 1px;
-            padding: 1rem;
-            gap: 1rem;
-        }
-
-        .info {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .title a{
-            text-decoration: none;
-            color: black;
-        }
-
-    </style>
-    """ + f"""
-    <body>
+    <body style="margin: 0; padding: 0; box-sizing: border-box;">
         <main>
             <span>{name}</span>
-            <p>email enviado com sucelsso!!</p>
-
-            <img src="https://petitgato.com.br/img/webp/gatos-persas-em-sao-paulo-img-3780.webp" alt="">
+            <div style="background-color: red; padding: 10px; width: 400px; object-fit: cover;">
+                <p style="background-color: cadetblue; width: 400px;">email enviado com sucesso!!</p>
+                <div style="background-image: url('https://i.pinimg.com/736x/31/65/f3/3165f3d062c8d43cfdd0c836e1811075.jpg'); background-size: cover; width: 400px; height: 200px;"></div>
+            </div>
         </main>
     </body>
     </html>
-
-    """
+"""
     em = MIMEMultipart('alternatives')
 
     em['Subject'] = f'Formulário de Agrado por {name}'
