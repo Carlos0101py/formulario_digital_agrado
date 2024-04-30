@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, jsonify
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import os,ssl, smtplib, json
@@ -18,7 +18,18 @@ def home_page():
 
 @form_route.post('/send_pdf')
 def send_pdf():
-    pass
+    dados = request.get_json()
+    itens = dados.get('itens')
+
+    print("itens recebidos,", itens)
+
+    estampas = itens.get('estampas')
+    print("LISTA DE CORES: ", estampas) 
+
+    return jsonify({
+        'mensagem': 'itens recebidos com sucesso',
+        'status': 200
+    })
 
 @form_route.post('/submit')
 def submit():
