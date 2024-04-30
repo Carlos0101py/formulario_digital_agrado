@@ -1,19 +1,24 @@
-from flask import Blueprint, render_template, request, url_for
+from flask import Blueprint, render_template, request
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from flask import Flask, jsonify
-import os
-import ssl
-import smtplib
+import os,ssl, smtplib, json
 from dotenv import load_dotenv
 
 load_dotenv()
 
 form_route = Blueprint('form_route', __name__)
+admin_route = Blueprint('admin_route', __name__)
 
 @form_route.get('/')
 def home_page():
-    return render_template("index.html")
+    with open('itens.json', 'r') as arquivo_json:
+        itens = json.load(arquivo_json)
+    
+    return render_template('index.html', itens=itens)
+
+@form_route.post('/send_pdf')
+def send_pdf():
+    pass
 
 @form_route.post('/submit')
 def submit():
