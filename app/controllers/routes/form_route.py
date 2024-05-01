@@ -24,11 +24,15 @@ def home_page():
     
     return render_template('index.html', itens=itens)
 
-@form_route.post('/send_pdf')
-def send_pdf():
-    # Receber os dados JSON do formulário
+@form_route.post('/create_pdf')
+def create_pdf():
     data = request.get_json()
     list = data.get('itens')
+    name = data.get('nome')
+    email = data.get('email')
+
+    print('name: ',name)
+    print('email: ',email)
 
     # cores = list['cores']
     estampas = list['estampas']
@@ -47,7 +51,7 @@ def send_pdf():
     print(df_itens)
     print(df_estampas)
 
-    def create_pdf(dfs, file_name):
+    def create_pdf_file(dfs, file_name):
         doc = SimpleDocTemplate(file_name, pagesize=letter)
         elements = []
 
@@ -78,18 +82,18 @@ def send_pdf():
             
         doc.build(elements)
 
-    create_pdf([df_itens, df_estampas], 'Formulario.pdf')
+    create_pdf_file([df_itens, df_estampas], 'Formulario.pdf')
 
     with open('Formulario.pdf', 'rb') as file:
         pdf_data = file.read()
 
     files = {'pdf_file': pdf_data}
-    response = requests.post('http://127.0.0.1:5000/submit', files=files)
+    response = requests.post('http://127.0.0.1:5000/send_email', files=files)
 
     return response.text
 
-@form_route.post('/submit')
-def submit():
+@form_route.post('/send_email')
+def send_email():
     email_sender = os.getenv("EMAIL_SENDER") 
     email_pass = os.getenv("SMTP_PASSWORD")
     email_reciever = os.getenv("EMAIL_RECIEVER")
@@ -106,13 +110,23 @@ def submit():
     part.add_header('Content-Disposition', f'attachment; filename=Formulario.pdf')
     msg.attach(part)
 
-    context = ssl.create_default_context()
-    with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
-        print("Sending email...")
-        smtp.login(email_sender, email_pass)
-        smtp.sendmail(email_sender, email_reciever, msg.as_string())
-
     with open('itens.json', 'r') as arquivo_json:
         itens = json.load(arquivo_json)
 
-    return render_template("index.html", itens=itens)
+    try:
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+            print("Sending email...")
+            smtp.login(email_sender, email_pass)
+            smtp.sendmail(email_sender, email_reciever, msg.as_string())
+
+        return jsonify({
+            'status': 'ok',
+            'message': 'email enviado com sucesso'
+        }), 200
+
+    except:
+        return jsonify({
+            'status': 'Error',
+            'message': 'email não enviado'
+        }), 500
