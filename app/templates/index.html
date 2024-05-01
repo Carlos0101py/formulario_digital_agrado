@@ -12,7 +12,7 @@
 <script>
 
     var itenSelecionado = {
-        items: [],
+        itens: [],
         estampas: [],
         cores: [],
         fontes: []
@@ -43,11 +43,10 @@
     }
 
     const selectOption = (valor, campo) => {
-        var novoObjeto = { nome: valor };
-
+        
         switch (campo) {
             case 1:
-                propriedade = 'items'
+                propriedade = 'itens'
                 break;
             case 2:
                 propriedade = 'estampas'
@@ -61,6 +60,8 @@
             default:
                 break;
         }
+
+        var novoObjeto = { [propriedade]: valor };
 
         var index = itenSelecionado[propriedade].findIndex(item => item.nome === valor);
 

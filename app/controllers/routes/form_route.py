@@ -1,8 +1,12 @@
 from flask import Blueprint, render_template, request, jsonify
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import os,ssl, smtplib, json
 from dotenv import load_dotenv
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Spacer
+import os,ssl, smtplib, json
+import pandas as pd
 
 load_dotenv()
 
@@ -18,16 +22,57 @@ def home_page():
 
 @form_route.post('/send_pdf')
 def send_pdf():
-    dados = request.get_json()
-    itens = dados.get('itens')
+    # Receber os dados JSON do formulário
+    data = request.get_json()
+    list = data.get('itens')
 
-    print("itens recebidos,", itens)
+    # cores = list['cores']
+    estampas = list['estampas']
+    # fontes = list['fontes']
+    itens = list['itens']
 
-    estampas = itens.get('estampas')
-    print("LISTA DE CORES: ", estampas) 
+    print('itens: ',itens)
+    print('estampas: ',estampas)
+
+    # df_cores = pd.DataFrame(cores, columns=['Cores'])
+    # df_estampas = pd.DataFrame(estampas, columns=['Estampas'])
+    # df_fontes = pd.DataFrame(fontes, columns=['Fontes'])
+    df_itens = pd.DataFrame(itens, columns=['itens'])
+    df_estampas = pd.DataFrame(estampas, columns=['estampas'])
+
+    print(df_itens)
+    print(df_estampas)
+
+    def create_pdf(dfs, file_name):
+        doc = SimpleDocTemplate(file_name, pagesize=letter)
+        elements = []
+
+        for df in dfs:
+            format_data = [df.columns.values.tolist()] + df.values.tolist()
+            
+            table = Table(format_data)
+
+
+            table_style = TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                                        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                                        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                                        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                                        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                                        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                                        ('GRID', (0, 0), (-1, -1), 1, colors.black)])
+
+            table.setStyle(table_style)
+
+            elements.append(table)
+            elements.append(Spacer(1, 20))
+            
+        doc.build(elements)
+
+    # create_pdf([df_itens, df_estampas, df_cores, df_fontes], 'exemplo.pdf')
+    create_pdf([df_itens, df_estampas], 'Formulario.pdf')
 
     return jsonify({
-        'mensagem': 'itens recebidos com sucesso',
+        'mensagem': 'PDF criado com sucesso',
         'status': 200
     })
 
