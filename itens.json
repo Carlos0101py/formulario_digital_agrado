@@ -1,0 +1,26 @@
+{
+    "produtos": {
+        "itens": [
+            {
+                "nome": "divertida"
+            },
+            {
+                "nome": "tradicional"
+            },
+            {
+                "nome": "assustadora"
+            },
+            {
+                "nome": "estranha"
+            }
+        ],
+        "estampas": [
+            {
+                "nome": "divertida"
+            },
+            {
+                "nome": "tradicional"
+            }
+        ]
+    }
+}
