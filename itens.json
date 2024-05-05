@@ -2,24 +2,22 @@
     "produtos": {
         "itens": [
             {
-                "nome": "divertida"
+                "nome": "divertida",
+                "id": "0"
             },
             {
-                "nome": "tradicional"
-            },
-            {
-                "nome": "assustadora"
-            },
-            {
-                "nome": "estranha"
+                "nome": "tradicional",
+                "id": 1
             }
         ],
         "estampas": [
             {
-                "nome": "divertida"
+                "nome": "coco",
+                "id": 0
             },
             {
-                "nome": "tradicional"
+                "nome": "azuk",
+                "id": 1
             }
         ]
     }

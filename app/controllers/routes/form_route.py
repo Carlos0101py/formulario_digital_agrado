@@ -1,15 +1,14 @@
 from flask import Blueprint, render_template, request, jsonify
 from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from dotenv import load_dotenv
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Spacer, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
-import os,ssl, smtplib, json
-import pandas as pd
 from email.mime.base import MIMEBase
 from email import encoders
+import os,ssl, smtplib, json
+import pandas as pd
 import requests
 
 load_dotenv()
@@ -26,31 +25,19 @@ def home_page():
 
 @form_route.post('/create_pdf')
 def create_pdf():
-    data = request.get_json()
-    list = data.get('itens')
-    name = data.get('nome')
-    email = data.get('email')
 
-    print('name: ',name)
-    print('email: ',email)
+    useremail = request.form['email']
+    username = request.form['nome']
 
-    # cores = list['cores']
-    estampas = list['estampas']
-    # fontes = list['fontes']
-    itens = list['itens']
+    itens = request.form.getlist('produtos[itens][]')
+    patterns = request.form.getlist('produtos[estampas][]')
 
-    print('itens: ',itens)
-    print('estampas: ',estampas)
+    df_color = pd.DataFrame(itens, columns=['itens'])
+    df_patterns = pd.DataFrame(patterns, columns=['estampas'])
 
-    # df_cores = pd.DataFrame(cores, columns=['Cores'])
-    # df_estampas = pd.DataFrame(estampas, columns=['Estampas'])
-    # df_fontes = pd.DataFrame(fontes, columns=['Fontes'])
-    df_itens = pd.DataFrame(itens, columns=['itens'])
-    df_estampas = pd.DataFrame(estampas, columns=['estampas'])
-
-    print(df_itens)
-    print(df_estampas)
-
+    print('estampas: ', itens)
+    print('cores: ', patterns)
+    
     def create_pdf_file(dfs, file_name):
         doc = SimpleDocTemplate(file_name, pagesize=letter)
         elements = []
@@ -58,6 +45,17 @@ def create_pdf():
         styles = getSampleStyleSheet()
         title = Paragraph("Formulario Agrado", styles['Title'])
         elements.append(title)
+        elements.append(Spacer(1, 20))
+
+        body_style = styles['Normal']
+        name_text = f"Nome: {username}"
+        email_text = f"E-mail: {useremail}"
+
+        paragraph_name = Paragraph(name_text, body_style)
+        paragraph_email = Paragraph(email_text, body_style)
+
+        elements.append(paragraph_name)
+        elements.append(paragraph_email)
         elements.append(Spacer(1, 20))
 
         for df in dfs:
@@ -82,7 +80,7 @@ def create_pdf():
             
         doc.build(elements)
 
-    create_pdf_file([df_itens, df_estampas], 'Formulario.pdf')
+    create_pdf_file([df_color, df_patterns], 'Formulario.pdf')
 
     with open('Formulario.pdf', 'rb') as file:
         pdf_data = file.read()
