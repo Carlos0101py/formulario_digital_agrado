@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-
 {% block head %}
 
 <title>Index</title>
@@ -9,135 +8,79 @@
 
 {% block body %}
 
-<script>
-
-    var itenSelecionado = {
-        itens: [],
-        estampas: [],
-        cores: [],
-        fontes: []
-    };
-
-    function mostrar() {
-        console.log(itenSelecionado);
-    }
-
-    const send_data = () => {
-
-        console.log('entrou')
-
-        fetch('/send_pdf', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ itens: itenSelecionado })
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Resposta do Flask:', data);
-            })
-            .catch(error => {
-                console.error('Erro:', error);
-            });
-    }
-
-    const selectOption = (valor, campo) => {
-        
-        switch (campo) {
-            case 1:
-                propriedade = 'itens'
-                break;
-            case 2:
-                propriedade = 'estampas'
-                break;
-            case 3:
-                propriedade = 'cores'
-                break;
-            case 4:
-                propriedade = 'fontes'
-                break;
-            default:
-                break;
-        }
-
-        var novoObjeto = { [propriedade]: valor };
-
-        var index = itenSelecionado[propriedade].findIndex(item => item.nome === valor);
-
-        if (index !== -1) {
-            itenSelecionado[propriedade].splice(index, 1);
-            console.log('Item removido:', valor);
-        } else {
-            itenSelecionado[propriedade].push(novoObjeto);
-            console.log('Novo objeto adicionado:', novoObjeto);
-        }
-
-        mostrar();
-    };
-
-</script>
-
-<div class="bg-green-900 flex justify-center font-bold text-xl text-white items-center h-[4rem]">
+<div class="bg-green-900 flex flex-row justify-center font-bold text-xl text-white items-center h-[4rem]">
     <h1>Projeto-agrado</h1>
 </div>
 
-<div class="flex justify-end mx-[10rem] py-[1rem] gap-4">
-    <button onclick="{send_data()}">botao</button>
+    <section>
+
+        <form action="/create_pdf" method="post">
+
+            <div>
+                <input type="submit" value="ENviar">
+            </div>
+
+            <div>
+                <div>
+                    <div>
+                        <span>Nome</span>
+                        <input class="border border-solid border-black" type="text" name="nome">
+                    </div>
+                    <div>
+                        <span>E-mail</span>
+                        <input class="border border-solid border-black" type="email" name="email">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="grid grid-cols-2 gap-2">
+                        {% for produto in itens['produtos']['itens'] %}
+                        <div class="body-div border border-solid rounded-md border-gray-400">
+                            <div class="">
+                                <div class="bg-green-800 rounded-md">
+                                    <img src="https://placehold.co/200x250" alt="Imagem de capa"
+                                        class="w-full h-full object-cover rounded-t-md" />
+                                </div>
+                                <div class="flex justify-center p-1 rounded-b-md text-gray-500 hover:bg-green-900 hover:text-white">
+                                    <span class="font-bold">{{ produto.nome }}</span>
+                                    <input class="checked" type="checkbox" name="produtos[itens][]" value="{{ produto.nome }}">
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div>
+                    <div class="grid grid-cols-2 gap-2">
+                        {% for produto in itens['produtos']['estampas'] %}
+                        <div class="body-div border border-solid rounded-md border-gray-400">
+                            <div class="">
+                                <div class="bg-green-800 rounded-md">
+                                    <img src="https://placehold.co/200x250" alt="Imagem de capa"
+                                        class="w-full h-full object-cover rounded-t-md" />
+                                </div>
+                                <div class="flex justify-center p-1 rounded-b-md text-gray-500 hover:bg-green-900 hover:text-white">
+                                    <span class="font-bold">{{ produto.nome }}</span>
+                                    <input class="checked" type="checkbox" name="produtos[estampas][]" value="{{ produto.nome }}">
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+    </section>
+
 </div>
 
-<form action="/submit" method="post">
+{% endblock %}
 
-    <div class="flex flex-col justify-start mx-[10rem] py-[4rem] gap-4">
-        <div class="flex flex-col ml-10">
-            <label class="text-sm" for="name">Nome:</label>
-            <input class="w-[30rem] pl-2 border rounded-md border-solid border-black" type="text" id="name" name="name"
-                placeholder="Digite...">
-        </div>
+{% block script %} 
 
-        <div class="flex flex-col ml-10">
-            <label class="text-sm" for="email">Email:</label>
-            <input class="w-[30rem] pl-2 border rounded-md border-solid border-black" type="email" id="email"
-                name="email" placeholder="Digite...">
-        </div>
-    </div>
-</form>
-
-<div class="flex justify-start text-xl font-bold mx-[10rem] py-[4rem]">
-    <span class="ml-10">Produto</span>
-</div>
-
-<div class="flex justify-center mx-[10rem] py-[1rem] gap-4">
-
-    {% for produto in itens['produtos']['itens'] %}
-    <div onclick="selectOption('{{produto.nome}}', 1)"
-        class="bg-slate-400 flex flex-col w-[200px] rounded-md border border-solid border-black">
-        <div class="bg-green-800 w-[200px] h-[250px] rounded-md">
-            <img src="https://placehold.co/200x250" alt="Imagem de capa"
-                class="w-full h-full object-cover rounded-t-md" />
-        </div>
-        <div class="bg-white p-5 flex justify-center rounded-b-md hover:bg-green-600">
-            <span>{{ produto.nome }}</span>
-        </div>
-    </div>
-    {% endfor %}
-</div>
-
-<div class="flex justify-center mx-[10rem] py-[1rem] gap-4">
-
-    {% for produto in itens['produtos']['estampas'] %}
-    <div onclick="selectOption('{{produto.nome}}', 2)"
-        class="bg-slate-400 flex flex-col w-[200px] rounded-md border border-solid border-black">
-        <div class="bg-green-800 w-[200px] h-[250px] rounded-md">
-            <img src="https://placehold.co/200x250" alt="Imagem de capa"
-                class="w-full h-full object-cover rounded-t-md" />
-        </div>
-        <div class="bg-white p-5 flex justify-center rounded-b-md hover:bg-green-600">
-            <span>{{ produto.nome }}</span>
-        </div>
-    </div>
-    {% endfor %}
-</div>
-</div>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 {% endblock %}
