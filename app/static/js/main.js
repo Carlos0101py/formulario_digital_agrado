@@ -9,13 +9,18 @@ function toggle (element){
     }
 }
 
+function toggleDescription (description){
+    if(description.classList.contains('active')){
+        description.classList.remove('active')
+        description.style.color = ('rgb(107, 114, 128, 1)')
+    }else{
+        description.classList.add('active')
+        description.style.color = ('rgb(255, 255, 255, 1)')
+    }
+}
+
 function toggleCheck (checkbox){
     checkbox.checked = !checkbox.checked
-    if(checkbox.checked){
-        console.log('marcado')
-    }else{
-        console.log('desmarcado')
-    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -25,7 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
         element.addEventListener('click', () => {
             toggle(element)
             const check = element.querySelector('.checked')
+            const description = element.querySelector('.description')
             toggleCheck(check)
+            toggleDescription(description)
         });
     });
 });
