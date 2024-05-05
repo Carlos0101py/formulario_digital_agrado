@@ -2,21 +2,25 @@
     "produtos": {
         "itens": [
             {
-                "nome": "divertida",
+                "nome": "Caneca",
                 "id": "0"
             },
             {
-                "nome": "tradicional",
+                "nome": "Squeeze",
+                "id": 1
+            },
+            {
+                "nome": "Xicara",
                 "id": 1
             }
         ],
         "estampas": [
             {
-                "nome": "coco",
+                "nome": "Banana",
                 "id": 0
             },
             {
-                "nome": "azuk",
+                "nome": "Mario",
                 "id": 1
             }
         ]
