@@ -2,26 +2,56 @@
     "produtos": {
         "itens": [
             {
-                "nome": "Caneca",
-                "id": "0"
+                "nome": "Caneca"
             },
             {
-                "nome": "Squeeze",
-                "id": 1
+                "nome": "Squeeze"
             },
             {
-                "nome": "Xicara",
-                "id": 1
+                "nome": "Azulejo"
+            },
+            {
+                "nome": "Quadro"
             }
         ],
         "estampas": [
             {
-                "nome": "Banana",
-                "id": 0
+                "nome": "Divertida"
             },
             {
-                "nome": "Mario",
-                "id": 1
+                "nome": "Mais letras"
+            },
+            {
+                "nome": "Tradicional"
+            },
+            {
+                "nome": "Minimalista"
+            }
+        ],
+        "cores": [
+            {
+                "nome": "Azul"
+            },
+            {
+                "nome": "Verde"
+            },
+            {
+                "nome": "Amarelo"
+            },
+            {
+                "nome": "Lilas"
+            },
+            {
+                "nome": "Vermelho"
+            },
+            {
+                "nome": "Laranja"
+            },
+            {
+                "nome": "Rosa"
+            },
+            {
+                "nome": "Preto"
             }
         ]
     }

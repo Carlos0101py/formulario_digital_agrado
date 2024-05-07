@@ -31,19 +31,18 @@ def create_pdf():
 
     itens = request.form.getlist('produtos[itens][]')
     patterns = request.form.getlist('produtos[estampas][]')
+    cores = request.form.getlist('produtos[cores][]')
 
-    df_color = pd.DataFrame(itens, columns=['itens'])
-    df_patterns = pd.DataFrame(patterns, columns=['estampas'])
+    df_itens = pd.DataFrame(itens, columns=['Itens'])
+    df_patterns = pd.DataFrame(patterns, columns=['Estampas'])
+    df_cores = pd.DataFrame(cores, columns=["Cores Escolhidas"])
 
-    print('estampas: ', itens)
-    print('cores: ', patterns)
-    
     def create_pdf_file(dfs, file_name):
         doc = SimpleDocTemplate(file_name, pagesize=letter)
         elements = []
 
         styles = getSampleStyleSheet()
-        title = Paragraph("Formulario Agrado", styles['Title'])
+        title = Paragraph("Formulário Agrado", styles['Title'])
         elements.append(title)
         elements.append(Spacer(1, 20))
 
@@ -80,7 +79,7 @@ def create_pdf():
             
         doc.build(elements)
 
-    create_pdf_file([df_color, df_patterns], 'Formulario.pdf')
+    create_pdf_file([df_itens, df_patterns, df_cores], 'Formulario.pdf')
 
     with open('Formulario.pdf', 'rb') as file:
         pdf_data = file.read()
