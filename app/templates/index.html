@@ -12,9 +12,27 @@
     <h1>Projeto-agrado</h1>
 </div>
 
-    <section class="flex justify-center px-3 pb-6">
+    <section class="flex justify-center px-3 pb-10">
 
         <form action="/create_pdf" method="post">
+
+            {% if response_text %}
+                <div class="notification_div flex items-center justify-center w-auto">
+                    <div class="bg-green-800 flex flex-col p-1 rounded-b-lg">
+                        <div class="flex justify-center gap-1">
+                            <div>
+                                <img src="../static/img/notification_important.svg" alt="Notificação">
+                            </div>
+                            <div class="flex items-center justify-center text-white font-semibold">
+                                <span>Atenção!</span>
+                            </div>
+                        </div>
+                        <div class="text-white font-normal">
+                            <span>{{ response_text }}</span>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
 
             <div class="flex justify-end items-center h-[4rem]">
                 <div class="flex justify-end  h-[3rem] w-[8rem]">
@@ -27,11 +45,11 @@
                 <div class="flex flex-col gap-2 w-full ">
                     <div>
                         <span class="text-gray-400 font-semibold">Nome</span>
-                        <input class="border border-solid border-gray-400 rounded-xl w-full pl-1" type="text" name="nome" placeholder="Digite...">
+                        <input class="border border-solid border-gray-400 rounded-xl w-full pl-1" type="text" name="nome" required placeholder="Digite...">
                     </div>
                     <div>
                         <span class="text-gray-400 font-semibold">E-mail</span>
-                        <input class="border border-solid border-gray-400 rounded-xl w-full pl-1" type="email" name="email" placeholder="Digite...">
+                        <input class="border border-solid border-gray-400 rounded-xl w-full pl-1" type="email" name="email" required placeholder="Digite...">
                     </div>
                 </div>
 
@@ -52,7 +70,7 @@
                                         class="w-full h-full object-cover rounded-t-md" />
                                 </div>
                                 <div class="flex justify-center p-2 rounded-b-md text-gray-500 hover:bg-green-900 hover:text-white">
-                                    <span class="description font-bold">{{ produto.nome }}</span>
+                                    <span class="description font-semibold">{{ produto.nome }}</span>
                                     <input class="checked hidden" type="checkbox" name="produtos[itens][]" value="{{ produto.nome }}">
                                 </div>
                             </div>
@@ -65,7 +83,7 @@
 
                     <div class="flex items-center h-[2rem]">
                         <div>
-                            <span class="text-gray-400 font-semibold">Estampas</span>
+                            <span class="text-gray-400 font-semibold">Tipos de estampas</span>
                         </div>
                     </div>
 
@@ -78,7 +96,7 @@
                                         class="w-full h-full object-cover rounded-t-md" />
                                 </div>
                                 <div class="flex justify-center p-2 rounded-b-md text-gray-500 hover:bg-green-900 hover:text-white">
-                                    <span class="description font-bold">{{ produto.nome }}</span>
+                                    <span class="description font-semibold">{{ produto.nome }}</span>
                                     <input class="checked hidden" type="checkbox" name="produtos[estampas][]" value="{{ produto.nome }}">
                                 </div>
                             </div>
@@ -86,13 +104,30 @@
                         {% endfor %}
                     </div>
                 </div>
+
+                <div>
+
+                    <div class="flex items-center h-[2rem]">
+                        <div>
+                            <span class="text-gray-400 font-semibold">Cores que você deseja na estampa</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-2 md:grid-cols-4">
+                        {% for produto in itens['produtos']['cores'] %}
+                        <div class="body-div flex justify-center border border-solid border-gray-400 text-gray-500 rounded-lg p-4 hover:bg-green-900 hover:text-white">
+                            <span class="description font-semibold">{{ produto.nome }}</span>
+                            <input class="checked hidden" type="checkbox" name="produtos[cores][]" value="{{ produto.nome }}">
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
             </div>
 
         </form>
 
     </section>
-
-</div>
 
 {% endblock %}
 

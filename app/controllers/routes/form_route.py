@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request
 from email.mime.multipart import MIMEMultipart
 from dotenv import load_dotenv
 from reportlab.lib import colors
@@ -18,10 +18,15 @@ admin_route = Blueprint('admin_route', __name__)
 
 @form_route.get('/')
 def home_page():
+    itens = get_json()
+    return render_template('index.html', itens=itens)
+
+@form_route.get('/get_json')
+def get_json():
     with open('itens.json', 'r') as arquivo_json:
         itens = json.load(arquivo_json)
-    
-    return render_template('index.html', itens=itens)
+
+    return itens
 
 @form_route.post('/create_pdf')
 def create_pdf():
@@ -31,19 +36,23 @@ def create_pdf():
 
     itens = request.form.getlist('produtos[itens][]')
     patterns = request.form.getlist('produtos[estampas][]')
+    color = request.form.getlist('produtos[cores][]')
 
-    df_color = pd.DataFrame(itens, columns=['itens'])
-    df_patterns = pd.DataFrame(patterns, columns=['estampas'])
+    if not itens or not patterns or not color:
+        itensJson = get_json()
+        response_text = 'Todos os campos devem ser preenchidos!'
+        return render_template('index.html', itens=itensJson, response_text=response_text)
 
-    print('estampas: ', itens)
-    print('cores: ', patterns)
-    
+    df_itens = pd.DataFrame(itens, columns=['Itens'])
+    df_patterns = pd.DataFrame(patterns, columns=['Estampas'])
+    df_color = pd.DataFrame(color, columns=["Cores Escolhidas"])
+
     def create_pdf_file(dfs, file_name):
         doc = SimpleDocTemplate(file_name, pagesize=letter)
         elements = []
 
         styles = getSampleStyleSheet()
-        title = Paragraph("Formulario Agrado", styles['Title'])
+        title = Paragraph("Formulário Agrado", styles['Title'])
         elements.append(title)
         elements.append(Spacer(1, 20))
 
@@ -80,7 +89,7 @@ def create_pdf():
             
         doc.build(elements)
 
-    create_pdf_file([df_color, df_patterns], 'Formulario.pdf')
+    create_pdf_file([df_itens, df_patterns, df_color], 'Formulario.pdf')
 
     with open('Formulario.pdf', 'rb') as file:
         pdf_data = file.read()
@@ -108,9 +117,6 @@ def send_email():
     part.add_header('Content-Disposition', f'attachment; filename=Formulario.pdf')
     msg.attach(part)
 
-    with open('itens.json', 'r') as arquivo_json:
-        itens = json.load(arquivo_json)
-
     try:
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
@@ -118,13 +124,11 @@ def send_email():
             smtp.login(email_sender, email_pass)
             smtp.sendmail(email_sender, email_reciever, msg.as_string())
 
-        return jsonify({
-            'status': 'ok',
-            'message': 'email enviado com sucesso'
-        }), 200
+            itensJson = get_json()
+            response_text = 'Pedido enviado com sucesso!'
+            return render_template('index.html', itens=itensJson, response_text=response_text)
 
     except:
-        return jsonify({
-            'status': 'Error',
-            'message': 'email não enviado'
-        }), 500
+        itensJson = get_json()
+        response_text = 'Erro ao tentar enviar o pedido!'
+        return render_template('index.html', itens=itensJson, response_text=response_text)
