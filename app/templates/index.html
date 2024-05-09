@@ -16,6 +16,24 @@
 
         <form action="/create_pdf" method="post">
 
+            {% if response_text %}
+                <div class="notification_div flex items-center justify-center w-auto">
+                    <div class="bg-green-800 flex flex-col p-1 rounded-b-lg">
+                        <div class="flex justify-center gap-1">
+                            <div>
+                                <img src="../static/img/notification_important.svg" alt="Notificação">
+                            </div>
+                            <div class="flex items-center justify-center text-white font-semibold">
+                                <span>Atenção!</span>
+                            </div>
+                        </div>
+                        <div class="text-white font-normal">
+                            <span>{{ response_text }}</span>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
             <div class="flex justify-end items-center h-[4rem]">
                 <div class="flex justify-end  h-[3rem] w-[8rem]">
                     <input class="bg-green-800 h-full w-full rounded-2xl text-white transition transform hover:ease-in-out duration-800  hover:scale-95" type="submit" value="Enviar">
@@ -27,11 +45,11 @@
                 <div class="flex flex-col gap-2 w-full ">
                     <div>
                         <span class="text-gray-400 font-semibold">Nome</span>
-                        <input class="border border-solid border-gray-400 rounded-xl w-full pl-1" type="text" name="nome" placeholder="Digite...">
+                        <input class="border border-solid border-gray-400 rounded-xl w-full pl-1" type="text" name="nome" required placeholder="Digite...">
                     </div>
                     <div>
                         <span class="text-gray-400 font-semibold">E-mail</span>
-                        <input class="border border-solid border-gray-400 rounded-xl w-full pl-1" type="email" name="email" placeholder="Digite...">
+                        <input class="border border-solid border-gray-400 rounded-xl w-full pl-1" type="email" name="email" required placeholder="Digite...">
                     </div>
                 </div>
 
@@ -110,8 +128,6 @@
         </form>
 
     </section>
-
-</div>
 
 {% endblock %}
 

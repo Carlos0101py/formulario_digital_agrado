@@ -15,6 +15,19 @@ function toggleCheck (checkbox){
     checkbox.checked = !checkbox.checked
 }
 
+function hiddenNotification(element){
+    element.style.display = "none";
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+    notification = document.querySelector('.notification_div')
+
+    if(notification != null){
+        setTimeout(()=> hiddenNotification(notification), 5000)
+    }
+})
+
+
 document.addEventListener('DOMContentLoaded', () => {
     body = document.querySelectorAll('.body-div')
     checkbox = document.querySelectorAll('.checked')
