@@ -42,6 +42,12 @@ def create_pdf():
         itensJson = get_json()
         response_text = 'Todos os campos devem ser preenchidos!'
         return render_template('index.html', itens=itensJson, response_text=response_text)
+    
+    quant = len(itens)
+    if(quant > 1):
+        itensJson = get_json()
+        response_text = 'Quantidade de produtos maior que o solicitado!'
+        return render_template('index.html', itens=itensJson, response_text=response_text)
 
     df_itens = pd.DataFrame(itens, columns=['Itens'])
     df_patterns = pd.DataFrame(patterns, columns=['Estampas'])
@@ -126,6 +132,9 @@ def send_email():
 
             itensJson = get_json()
             response_text = 'Pedido enviado com sucesso!'
+
+            os.remove('Formulario.pdf')
+
             return render_template('index.html', itens=itensJson, response_text=response_text)
 
     except:
