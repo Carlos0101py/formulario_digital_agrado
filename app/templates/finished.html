@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block head %}
+
+    <title>Obrigado!</title>
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="flex justify-center items-center h-dvh">
+
+        <div class="flex flex-col justify-center items-center">
+            <div class="flex justify-center w-[10rem]">
+                <img src="{{ url_for('static', filename='img/done_all.svg') }}" alt="">
+            </div>
+            <span>Recebemos seu pedido!</span>
+        </div>
+
+    </div>
+    
+{% endblock %}

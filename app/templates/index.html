@@ -16,7 +16,8 @@
 
         <form action="/create_pdf" method="post">
 
-            {% if response_text %}
+            {% if message %}
+                {% for messager in message %}
                 <div class="notification_div flex items-center justify-center w-auto">
                     <div class="bg-green-800 flex flex-col p-1 rounded-b-lg">
                         <div class="flex justify-center gap-1">
@@ -28,10 +29,11 @@
                             </div>
                         </div>
                         <div class="text-white font-normal">
-                            <span>{{ response_text }}</span>
+                            <span>{{ messager }}</span>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             {% endif %}
 
             <div class="flex justify-end items-center h-[4rem]">
@@ -44,11 +46,11 @@
 
                 <div class="flex flex-col gap-2 w-full ">
                     <div>
-                        <span class="text-gray-400 font-semibold">Nome</span>
+                        <span class="text-gray-400 font-semibold">Nome<span class="text-requiredfield">*</span></span>
                         <input class="border border-solid border-gray-400 rounded-xl w-full pl-1" type="text" name="nome" required placeholder="Digite...">
                     </div>
                     <div>
-                        <span class="text-gray-400 font-semibold">E-mail</span>
+                        <span class="text-gray-400 font-semibold">E-mail<span class="text-requiredfield">*</span></span>
                         <input class="border border-solid border-gray-400 rounded-xl w-full pl-1" type="email" name="email" required placeholder="Digite...">
                     </div>
                 </div>
@@ -57,7 +59,7 @@
 
                     <div class="flex items-center h-[2rem]">
                         <div>
-                            <span class="text-gray-400 font-semibold">Produtos</span>
+                            <span class="text-gray-400 font-semibold">Produtos<span class="text-requiredfield">*</span></span>
                         </div>
                     </div>
 
@@ -83,7 +85,7 @@
 
                     <div class="flex items-center h-[2rem]">
                         <div>
-                            <span class="text-gray-400 font-semibold">Tipos de estampas</span>
+                            <span class="text-gray-400 font-semibold">Tipos de estampas<span class="text-requiredfield">*</span></span>
                         </div>
                     </div>
 
@@ -109,7 +111,7 @@
 
                     <div class="flex items-center h-[2rem]">
                         <div>
-                            <span class="text-gray-400 font-semibold">Cores que você deseja na estampa</span>
+                            <span class="text-gray-400 font-semibold">Cores que você deseja na estampa<span class="text-requiredfield">*</span></span>
                         </div>
                     </div>
 
