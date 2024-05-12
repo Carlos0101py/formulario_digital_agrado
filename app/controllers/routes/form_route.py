@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for, flash, get_flashed_messages
 from email.mime.multipart import MIMEMultipart
 from dotenv import load_dotenv
 from reportlab.lib import colors
@@ -9,24 +9,34 @@ from email.mime.base import MIMEBase
 from email import encoders
 import os,ssl, smtplib, json
 import pandas as pd
-import requests
+
 
 load_dotenv()
 
 form_route = Blueprint('form_route', __name__)
 admin_route = Blueprint('admin_route', __name__)
 
-@form_route.get('/')
-def home_page():
-    itens = get_json()
-    return render_template('index.html', itens=itens)
 
-@form_route.get('/get_json')
 def get_json():
     with open('itens.json', 'r') as arquivo_json:
         itens = json.load(arquivo_json)
 
     return itens
+
+
+@form_route.get('/')
+def home_page():
+    itens = get_json()
+    message = get_flashed_messages()
+
+    return render_template('index.html', itens=itens, message=message)
+
+
+@form_route.get('/finished')
+def finished_page():
+
+    return render_template('finished.html')
+
 
 @form_route.post('/create_pdf')
 def create_pdf():
@@ -39,15 +49,13 @@ def create_pdf():
     color = request.form.getlist('produtos[cores][]')
 
     if not itens or not patterns or not color:
-        itensJson = get_json()
-        response_text = 'Todos os campos devem ser preenchidos!'
-        return render_template('index.html', itens=itensJson, response_text=response_text)
+        flash('Todos os campos devem ser preenchidos!', 'error')
+        return redirect(url_for('form_route.home_page'))
     
     quant = len(itens)
     if(quant > 1):
-        itensJson = get_json()
-        response_text = 'Quantidade de produtos maior que o solicitado!'
-        return render_template('index.html', itens=itensJson, response_text=response_text)
+        flash('Quantidade de produtos maior que o solicitado!', 'error')
+        return redirect(url_for('form_route.home_page'))
 
     df_itens = pd.DataFrame(itens, columns=['Itens'])
     df_patterns = pd.DataFrame(patterns, columns=['Estampas'])
@@ -97,15 +105,10 @@ def create_pdf():
 
     create_pdf_file([df_itens, df_patterns, df_color], 'Formulario.pdf')
 
-    with open('Formulario.pdf', 'rb') as file:
-        pdf_data = file.read()
+    return redirect(url_for('form_route.send_email'))
 
-    files = {'pdf_file': pdf_data}
-    response = requests.post('http://127.0.0.1:5000/send_email', files=files)
 
-    return response.text
-
-@form_route.post('/send_email')
+@form_route.route('/send_email')
 def send_email():
     email_sender = os.getenv("EMAIL_SENDER") 
     email_pass = os.getenv("SMTP_PASSWORD")
@@ -130,14 +133,11 @@ def send_email():
             smtp.login(email_sender, email_pass)
             smtp.sendmail(email_sender, email_reciever, msg.as_string())
 
-            itensJson = get_json()
-            response_text = 'Pedido enviado com sucesso!'
-
-            os.remove('Formulario.pdf')
-
-            return render_template('index.html', itens=itensJson, response_text=response_text)
+            return redirect(url_for('form_route.finished_page'))
 
     except:
-        itensJson = get_json()
-        response_text = 'Erro ao tentar enviar o pedido!'
-        return render_template('index.html', itens=itensJson, response_text=response_text)
+        flash('Erro ao tentar enviar o pedido!', 'error')
+        return redirect(url_for('form_route.home_page'))
+    
+    finally:
+        os.remove('Formulario.pdf')

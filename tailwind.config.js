@@ -2,7 +2,11 @@
 module.exports = {
   content: ["./app/templates/*.html"],
   theme: {
-    extend: {},
+    extend: {
+      colors:{
+        requiredfield:'#ff0000',
+      },
+    },
   },
   plugins: [],
 }
