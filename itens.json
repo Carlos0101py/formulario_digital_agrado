@@ -2,16 +2,20 @@
     "produtos": {
         "itens": [
             {
-                "nome": "Caneca"
+                "nome": "Caneca",
+                "img": "CANECA_200X250.png"
             },
             {
-                "nome": "Squeeze"
+                "nome": "Squeeze",
+                "img": "SQUEEZE_200X250.png"
             },
             {
-                "nome": "Azulejo"
+                "nome": "Azulejo",
+                "img": "AZULEJO_200X250.png"
             },
             {
-                "nome": "Quadro"
+                "nome": "Quadro",
+                "img": "QUADRO_200X250.png"
             }
         ],
         "estampas": [
