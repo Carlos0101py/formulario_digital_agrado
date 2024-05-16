@@ -47,8 +47,12 @@ def create_pdf():
     itens = request.form.getlist('produtos[itens][]')
     patterns = request.form.getlist('produtos[estampas][]')
     color = request.form.getlist('produtos[cores][]')
+    notcolor = request.form.getlist('produtos[naocores][]')
 
-    if not itens or not patterns or not color:
+    print(color)
+    print(notcolor)
+
+    if not itens or not patterns or not color or not notcolor:
         flash('Todos os campos devem ser preenchidos!', 'error')
         return redirect(url_for('form_route.home_page'))
     
@@ -60,6 +64,7 @@ def create_pdf():
     df_itens = pd.DataFrame(itens, columns=['Itens'])
     df_patterns = pd.DataFrame(patterns, columns=['Estampas'])
     df_color = pd.DataFrame(color, columns=["Cores Escolhidas"])
+    df_notcolor = pd.DataFrame(notcolor, columns=['Cores Não Escolhidas'])
 
     def create_pdf_file(dfs, file_name):
         doc = SimpleDocTemplate(file_name, pagesize=letter)
@@ -103,7 +108,7 @@ def create_pdf():
             
         doc.build(elements)
 
-    create_pdf_file([df_itens, df_patterns, df_color], 'Formulario.pdf')
+    create_pdf_file([df_itens, df_patterns, df_color, df_notcolor], 'Formulario.pdf')
 
     return redirect(url_for('form_route.send_email'))
 
