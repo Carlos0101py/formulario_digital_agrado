@@ -42,3 +42,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+
+document.addEventListener('DOMContentLoaded', () =>{
+    body = document.getElementById('anexoBody')
+    inputFile = document.getElementById('anexo')
+    parquivo = document.getElementById('NomeArquivo')
+
+    body.addEventListener('click', () =>{
+
+        inputFile.click()
+
+        inputFile.addEventListener('change', ()=>{
+
+            const curFile = inputFile.files
+
+            body.style.backgroundColor= '#14532D'
+            
+            for (file of curFile){
+                parquivo.textContent = file.name
+            }
+        })
+    })
+})

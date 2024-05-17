@@ -2,7 +2,7 @@
 
 {% block head %}
 
-<title>Index</title>
+<title>Meu pedido</title>
 
 {% endblock %}
 
@@ -16,7 +16,7 @@
 
 <section class="flex justify-center px-3 pb-10">
 
-    <form action="/create_pdf" method="post">
+    <form action="/create_pdf" method="post" enctype="multipart/form-data">
 
         {% if message %}
             {% for messager in message %}
@@ -124,6 +124,45 @@
                     </div>
                     {% endfor %}
                 </div>
+
+            </div>
+
+            <div>
+
+                <div class="flex items-center h-[2rem]">
+                    <div>
+                        <span class="text-gray-400 font-semibold">Cores que você <span class="font-bold text-gray-500">NÃO</span> deseja na estampa<span class="text-requiredfield">*</span></span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-4 gap-2 md:grid-cols-4">
+                    {% for produto in itens['produtos']['cores'] %}
+                    <div class="body-div flex justify-center border border-solid border-gray-400 text-gray-500 rounded-lg p-4 hover:bg-green-900 hover:text-white">
+                        <span class="description font-semibold">{{ produto.nome }}</span>
+                        <input class="checked hidden" type="checkbox" name="produtos[naocores][]" value="{{ produto.nome }}">
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+            <div class="flex items-center h-[2rem]">
+                <div>
+                    <span class="text-gray-400 font-semibold">Anexos</span>
+                </div>
+            </div>
+
+            <div>
+
+                <div id="anexoBody" class="flex flex-col justify-center border border-solid border-gray-400 text-gray-500 rounded-lg p-4 w-[7rem] h-[8rem]">
+                    <div class="flex justify-center">
+                        <img src="{{ url_for('static', filename='img/upload_file_icon.svg') }}" alt="Anexos">
+                    </div>
+                    <input class="hidden" id="anexo" type="file" name="imagem" id="imagem" accept="image/png, image/jpeg">
+                    
+                </div>
+
+                <p id="NomeArquivo">Nenhum arquivo selecionado</p>
 
             </div>
         </div>
