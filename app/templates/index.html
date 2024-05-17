@@ -2,7 +2,7 @@
 
 {% block head %}
 
-<title>Index</title>
+<title>Meu pedido</title>
 
 {% endblock %}
 
@@ -16,7 +16,7 @@
 
 <section class="flex justify-center px-3 pb-10">
 
-    <form action="/create_pdf" method="post">
+    <form action="/create_pdf" method="post" enctype="multipart/form-data">
 
         {% if message %}
             {% for messager in message %}
@@ -145,6 +145,8 @@
                 </div>
 
             </div>
+
+            <input type="file" name="imagem" id="">
         </div>
 
     </form>

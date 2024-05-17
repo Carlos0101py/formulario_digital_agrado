@@ -3,10 +3,11 @@ from email.mime.multipart import MIMEMultipart
 from dotenv import load_dotenv
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Spacer, Paragraph
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Spacer, Paragraph, Image
 from reportlab.lib.styles import getSampleStyleSheet
 from email.mime.base import MIMEBase
 from email import encoders
+from werkzeug.utils import secure_filename
 import os,ssl, smtplib, json
 import pandas as pd
 
@@ -49,8 +50,12 @@ def create_pdf():
     color = request.form.getlist('produtos[cores][]')
     notcolor = request.form.getlist('produtos[naocores][]')
 
-    print(color)
-    print(notcolor)
+    image_file = request.files['imagem']
+
+    if image_file:
+        save_path = os.path.join(os.getcwd(), 'app', 'static', 'filesPath', 'imgReceived', secure_filename(image_file.filename))
+        file_img_name = secure_filename(image_file.filename)
+        image_file.save(save_path)
 
     if not itens or not patterns or not color or not notcolor:
         flash('Todos os campos devem ser preenchidos!', 'error')
@@ -105,16 +110,30 @@ def create_pdf():
             table.setStyle(table_style)
             elements.append(table)
             elements.append(Spacer(1, 20))
-            
+        
+        anexo_title = Paragraph("Anexo:", styles['Title'])
+        elements.append(anexo_title)
+        
+        if image_file:
+            img_path = os.path.join(os.getcwd(), 'app', 'static', 'filesPath', 'imgReceived', file_img_name)
+            elements.append(Image(img_path, width=150, height=150))
+
         doc.build(elements)
+        
+        if image_file:
+            os.remove(img_path)
 
-    create_pdf_file([df_itens, df_patterns, df_color, df_notcolor], 'Formulario.pdf')
+    pdf_directory = os.path.join(os.getcwd(), 'app', 'static', 'filesPath', 'pdfReceived')
+    file_name = f"{username}Formulario.pdf" 
+    pdf_path = os.path.join(pdf_directory, file_name)
 
-    return redirect(url_for('form_route.send_email'))
+    create_pdf_file([df_itens, df_patterns, df_color, df_notcolor], pdf_path)
+
+    return redirect(url_for('form_route.send_email', username=username))
 
 
-@form_route.route('/send_email')
-def send_email():
+@form_route.route('/send_email/<username>')
+def send_email(username):
     email_sender = os.getenv("EMAIL_SENDER") 
     email_pass = os.getenv("SMTP_PASSWORD")
     email_reciever = os.getenv("EMAIL_RECIEVER")
@@ -124,7 +143,11 @@ def send_email():
     msg['To'] = email_reciever
     msg['Subject'] = 'Formulário de Agrado'
 
-    with open('Formulario.pdf', 'rb') as file:
+    file_directory = os.path.join(os.getcwd(), 'app', 'static', 'filesPath', 'pdfReceived')
+    file_name = f"{username}Formulario.pdf"
+    file_path = os.path.join(file_directory, file_name)
+
+    with open(file_path, 'rb') as file:
         part = MIMEBase('application', 'octet-stream')
         part.set_payload(file.read())
     encoders.encode_base64(part)
@@ -145,4 +168,4 @@ def send_email():
         return redirect(url_for('form_route.home_page'))
     
     finally:
-        os.remove('Formulario.pdf')
+        os.remove(file_path)
