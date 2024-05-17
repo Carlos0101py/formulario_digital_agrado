@@ -146,7 +146,25 @@
 
             </div>
 
-            <input type="file" name="imagem" id="">
+            <div class="flex items-center h-[2rem]">
+                <div>
+                    <span class="text-gray-400 font-semibold">Anexos</span>
+                </div>
+            </div>
+
+            <div>
+
+                <div id="anexoBody" class="flex flex-col justify-center border border-solid border-gray-400 text-gray-500 rounded-lg p-4 w-[7rem] h-[8rem]">
+                    <div class="flex justify-center">
+                        <img src="{{ url_for('static', filename='img/upload_file_icon.svg') }}" alt="Anexos">
+                    </div>
+                    <input class="hidden" id="anexo" type="file" name="imagem" id="imagem" accept="image/png, image/jpeg">
+                    
+                </div>
+
+                <p id="NomeArquivo">Nenhum arquivo selecionado</p>
+
+            </div>
         </div>
 
     </form>
