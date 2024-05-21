@@ -49,11 +49,11 @@
             <div class="flex flex-col gap-2 w-full ">
                 <div>
                     <span class="text-gray-400 font-semibold">Nome<span class="text-requiredfield">*</span></span>
-                    <input class="border border-solid border-gray-400 rounded-md w-full h-[2rem] pl-1" type="text" name="nome" required placeholder="Digite...">
+                    <input class="border border-solid border-gray-400 rounded-md w-full h-[2rem] pl-1" type="text" name="nome" autocomplete="given-name" required placeholder="Digite...">
                 </div>
                 <div>
                     <span class="text-gray-400 font-semibold">E-mail<span class="text-requiredfield">*</span></span>
-                    <input class="border border-solid border-gray-400 rounded-md w-full h-[2rem] pl-1" type="email" name="email" required placeholder="Digite...">
+                    <input class="border border-solid border-gray-400 rounded-md w-full h-[2rem] pl-1" type="email" name="email" autocomplete="off" required placeholder="Digite...">
                 </div>
             </div>
 
@@ -67,13 +67,13 @@
 
                 <div class="grid grid-cols-2 gap-2 md:grid-cols-4">
                     {% for produto in itens['produtos']['itens'] %}
-                    <div class="body-div border border-solid rounded-md border-gray-400">
+                    <div id="products" class="bodyDiv border border-solid rounded-md border-gray-400">
                         <div class="">
                             <img src="{{ url_for('static', filename='img/' + produto.img) }}" alt="Imagem de capa"
                                     class="w-full h-full object-cover rounded-t-md" />
 
-                            <div class="flex justify-center p-2 rounded-b-md text-gray-500 hover:bg-green-900 hover:text-white">
-                                <span class="description font-semibold">{{ produto.nome }}</span>
+                            <div class="descriptionField flex justify-center p-2 rounded-b-md text-gray-500 hover:bg-green-900 hover:text-white">
+                                <span class="font-semibold">{{ produto.nome }}</span>
                                 <input class="checked hidden" type="checkbox" name="produtos[itens][]" value="{{ produto.nome }}">
                             </div>
                         </div>
@@ -92,14 +92,14 @@
 
                 <div class="grid grid-cols-2 gap-2 md:grid-cols-4">
                     {% for produto in itens['produtos']['estampas'] %}
-                    <div class="body-div border border-solid rounded-md border-gray-400">
+                    <div class="bodyDiv border border-solid rounded-md border-gray-400">
                         <div class="">
                             <div class="bg-green-800 rounded-md">
                                 <img src="https://placehold.co/200x250" alt="Imagem de capa"
                                     class="w-full h-full object-cover rounded-t-md" />
                             </div>
                             <div class="flex justify-center p-2 rounded-b-md text-gray-500 hover:bg-green-900 hover:text-white">
-                                <span class="description font-semibold">{{ produto.nome }}</span>
+                                <span class=" font-semibold">{{ produto.nome }}</span>
                                 <input class="checked hidden" type="checkbox" name="produtos[estampas][]" value="{{ produto.nome }}">
                             </div>
                         </div>
@@ -118,7 +118,7 @@
 
                 <div class="grid grid-cols-4 gap-2 md:grid-cols-4">
                     {% for produto in itens['produtos']['cores'] %}
-                    <div class="body-div flex justify-center border border-solid border-gray-400 text-gray-500 rounded-lg p-4 hover:bg-green-900 hover:text-white">
+                    <div class="bodyDiv flex justify-center border border-solid border-gray-400 text-gray-500 rounded-lg p-4 hover:bg-green-900 hover:text-white">
                         <span class="description font-semibold">{{ produto.nome }}</span>
                         <input class="checked hidden" type="checkbox" name="produtos[cores][]" value="{{ produto.nome }}">
                     </div>
@@ -137,7 +137,7 @@
 
                 <div class="grid grid-cols-4 gap-2 md:grid-cols-4">
                     {% for produto in itens['produtos']['cores'] %}
-                    <div class="body-div flex justify-center border border-solid border-gray-400 text-gray-500 rounded-lg p-4 hover:bg-green-900 hover:text-white">
+                    <div class="bodyDiv flex justify-center border border-solid border-gray-400 text-gray-500 rounded-lg p-4 hover:bg-green-900 hover:text-white">
                         <span class="description font-semibold">{{ produto.nome }}</span>
                         <input class="checked hidden" type="checkbox" name="produtos[naocores][]" value="{{ produto.nome }}">
                     </div>
@@ -175,6 +175,6 @@
 
 {% block script %} 
 
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script src="{{ url_for('static', filename='js/interactionDOM.js') }}"></script>
 
 {% endblock %}
