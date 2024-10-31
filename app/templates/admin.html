@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block head %}
+
+<title>Admin-page</title>
+
+{% endblock %}
+
+{% block body %}
+
+
+<div class="bg-green-900 flex flex-row items-center h-[4rem] px-3 lg:px-[14rem]">
+    <div class="">
+        <img class="w-[7rem]" src="{{ url_for('static', filename='img/logo-branca.png') }}" alt="">
+    </div>
+</div>
+
+<div class="flex justify-start w-[12rem] px-3 pb-10">
+    <div class="flex flex-col gap-3">
+
+        <!-- {% for produto in itens['produtos']['itens'] %} -->
+        <div>
+            <div class="flex justify-end">
+            </div>
+            <!-- <img src="{{ url_for('static', filename='img/' + produto.img) }}" alt=""> -->
+            <img id="img" src=""> 
+            <input type="file" name="" id="testandoUMb">
+            <div class="flex justify-center">
+                <input id="img-input" type="text">
+            </div>
+        </div>
+        <!-- {% endfor %} -->
+    </div>
+</div>
+
+
+
+<script>
+
+    const img = document.getElementById('img')
+    const imgInput = document.getElementById('img-input')
+
+    console.log(imgInput);
+
+    imgInput.addEventListener('change', function(evt){
+        if(!(evt.target && evt.target.files && evt.target.files.length > 0)){
+            console.log('pass');
+            return;
+        }
+
+        console.log('passou');
+
+        var r = new FileReader();
+
+        r.onload = function(){
+            img.src = r.result;
+
+            print(img.src)
+        }
+
+        r.readAsDataURL(evt.target.files[0]);
+
+    })
+
+
+</script>
+
+{% endblock %}

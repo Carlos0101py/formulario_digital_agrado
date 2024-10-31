@@ -1,6 +1,5 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, get_flashed_messages
+from app.controllers.configuration.configuration import *
 from email.mime.multipart import MIMEMultipart
-from dotenv import load_dotenv
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Spacer, Paragraph, Image
@@ -8,15 +7,13 @@ from reportlab.lib.styles import getSampleStyleSheet
 from email.mime.base import MIMEBase
 from email import encoders
 from werkzeug.utils import secure_filename
-import os,ssl, smtplib, json
+import ssl, smtplib
 import pandas as pd
 
 
 load_dotenv()
 
 form_route = Blueprint('form_route', __name__)
-admin_route = Blueprint('admin_route', __name__)
-
 
 def get_json():
     with open('itens.json', 'r') as arquivo_json:
@@ -30,6 +27,15 @@ def home_page():
     itens = get_json()
     message = get_flashed_messages()
 
+    return render_template('index.html', itens=itens, message=message)
+
+
+@form_route.app_errorhandler(404)
+def page_not_found(error):
+
+    itens = get_json()
+    message = get_flashed_messages()
+    
     return render_template('index.html', itens=itens, message=message)
 
 

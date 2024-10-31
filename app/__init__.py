@@ -1,6 +1,6 @@
 from flask import Flask
 from app.controllers.routes.form_route import form_route
-from app.controllers.routes.form_route import admin_route
+from app.controllers.routes.admin_route import admin_route
 from dotenv import load_dotenv
 import os 
 

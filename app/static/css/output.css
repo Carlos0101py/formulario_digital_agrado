@@ -558,16 +558,8 @@ video {
   position: static;
 }
 
-.absolute {
-  position: absolute;
-}
-
-.z-0 {
-  z-index: 0;
-}
-
-.z-10 {
-  z-index: 10;
+.mt-5 {
+  margin-top: 1.25rem;
 }
 
 .block {
@@ -614,6 +606,10 @@ video {
   width: 10rem;
 }
 
+.w-\[2rem\] {
+  width: 2rem;
+}
+
 .w-\[7rem\] {
   width: 7rem;
 }
@@ -628,6 +624,46 @@ video {
 
 .w-full {
   width: 100%;
+}
+
+.w-\[\] {
+  width: ;
+}
+
+.w-\[100\] {
+  width: 100;
+}
+
+.w-\[100p\] {
+  width: 100p;
+}
+
+.w-\[100pz\] {
+  width: 100pz;
+}
+
+.w-\[100px\] {
+  width: 100px;
+}
+
+.w-\[5rem\] {
+  width: 5rem;
+}
+
+.w-\[15rem\] {
+  width: 15rem;
+}
+
+.w-\[9rem\] {
+  width: 9rem;
+}
+
+.w-\[14rem\] {
+  width: 14rem;
+}
+
+.w-\[12rem\] {
+  width: 12rem;
 }
 
 .transform {
@@ -652,6 +688,10 @@ video {
 
 .items-center {
   align-items: center;
+}
+
+.justify-start {
+  justify-content: flex-start;
 }
 
 .justify-end {
@@ -742,6 +782,16 @@ video {
   padding-right: 0.75rem;
 }
 
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.px-1 {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
 .pb-10 {
   padding-bottom: 2.5rem;
 }
@@ -760,6 +810,10 @@ video {
 
 .font-semibold {
   font-weight: 600;
+}
+
+.font-black {
+  font-weight: 900;
 }
 
 .text-gray-400 {
@@ -782,12 +836,25 @@ video {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.text-black {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
+}
+
 .transition {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+}
+
+.duration-700 {
+  transition-duration: 700ms;
+}
+
+.ease-in-out {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .hover\:scale-95:hover {
@@ -808,6 +875,16 @@ video {
 
 .hover\:ease-in-out:hover {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.group:hover .group-hover\:bg-green-900 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(20 83 45 / var(--tw-bg-opacity));
+}
+
+.group:hover .group-hover\:text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 @media (min-width: 768px) {

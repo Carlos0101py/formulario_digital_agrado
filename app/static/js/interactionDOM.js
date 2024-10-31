@@ -41,7 +41,7 @@ function divCheckOneStyle(element) {
         element.style.backgroundColor = ''
 
         description = element.getElementsByTagName('span')[0]
-        description.style.color = ('rgb(107, 114, 128, 1)')
+        description.style.color = ('')
     } else {
         element.classList.add('active')
         element.style.backgroundColor = ('#14532D')
@@ -84,11 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     bodyDiv.forEach(element => {
         element.addEventListener('click', () => {
 
-            if (element.id === "products") {
-                toggleCheckOne(bodyDiv, element)
-            } else {
-                toggleCheck(element)
-            }
+            element.id === "products" ? toggleCheckOne(bodyDiv, element) : toggleCheck(element);
         });
     });
 }); 
